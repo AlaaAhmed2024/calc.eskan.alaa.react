@@ -1,0 +1,109 @@
+const express = require("express")
+const mysql =require("mysql")
+const cors = require('cors')
+
+
+const app = express()
+app.use(cors())
+
+
+//جلب البيانات
+
+const db=mysql.createConnection({
+    host:"localhost",
+    user:"root",
+    password:"",
+    database:"clients"
+
+
+})
+
+app.get('/my_clients',(req,res)=>{
+    const sql = "SELECT * FROM  my_clients"
+    db.query(sql ,(err , data)=>{
+        if(err) return res.json(err);
+        return res.json(data)
+    })
+})
+
+app.listen(8081,()=>{
+    console.log("listening")
+})
+
+
+
+
+//ارسال البيانات
+
+app.post('/create',(req,res)=>{
+     const name = req.body.name
+     const salary = req.body.salary
+     const bank = req.body.bank
+
+db.query(
+    "INSERT INTO my_clients (name , salary , bank) VALUES (?,?,?)",
+    [name,salary , bank],
+    (err, ressult)=>{
+        if(err){
+            console.log(err)
+        }else{
+            res.send(ressult)
+        }
+    }
+)
+
+    })
+
+app.listen(8083,()=>{
+    console.log("listening")
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//عرض النسب من الداتا بيس 
+const db2=mysql.createConnection({
+    host:"localhost",
+    user:"root",
+    password:"",
+    database:"alahli"
+  
+})
+
+app.get('/profit',(req,res)=>{
+    const sql2 = "SELECT * FROM  profit"
+    db2.query(sql2 ,(err , data)=>{
+        if(err) return res.json(err);
+        return res.json(data)
+    })
+})
+
+
+app.listen(8082,()=>{
+    console.log("listening")
+})
